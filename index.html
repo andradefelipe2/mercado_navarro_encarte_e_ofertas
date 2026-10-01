@@ -1,90 +1,76 @@
-<!DOCTYPE html>
-<html lang="pt">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Carrinho de Supermercado Minimalista - Line Art</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      background-color: #0d1117; /* Fundo escuro para destacar as linhas */
+<!-- CÓDIGO DO CARRINHO PULSANTE (MINIMALISTA) -->
+<style>
+  /* Container do carrinho fixado no canto inferior direito */
+  .cart-floating-widget {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 65px;
+    height: 65px;
+    z-index: 9999; /* Garante que fique por cima de outros elementos sem travar a tela */
+    pointer-events: none; /* Permite clicar através do container se necessário */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .cart-floating-svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Estilo das linhas com cores quentes */
+  .stroke-line-warm {
+    fill: none;
+    stroke: #ff4500; /* Laranja/Vermelho vibrante */
+    stroke-width: 3.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    
+    /* Animação pulsante em tons de Vermelho e Laranja */
+    animation: pulseWarmGlow 1.8s infinite ease-in-out alternate;
+  }
+
+  /* Efeito de iluminação e transição de cor quente */
+  @keyframes pulseWarmGlow {
+    0% {
+      stroke: #ff2a00; /* Vermelho puro */
+      filter: drop-shadow(0 0 3px #ff2a00);
+      opacity: 0.65;
     }
-
-    .cart-container {
-      width: 250px;
-      height: 250px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+    50% {
+      stroke: #ff7700; /* Laranja vivo */
+      filter: drop-shadow(0 0 12px #ff7700);
+      opacity: 1;
     }
-
-    .cart-svg {
-      width: 100%;
-      height: 100%;
+    100% {
+      stroke: #ff0055; /* Vermelho/Pink Neon */
+      filter: drop-shadow(0 0 16px #ff0055);
+      opacity: 0.85;
     }
+  }
+</style>
 
-    /* Estilo das linhas */
-    .stroke-line {
-      fill: none;
-      stroke: #00f0ff; /* Cor ciano/elétrica */
-      stroke-width: 3.5;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      
-      /* Animação de pulsação de luz e traço */
-      animation: pulseGlow 2s infinite ease-in-out alternate;
-    }
+<div class="cart-floating-widget">
+  <svg class="cart-floating-svg" viewBox="0 0 100 100">
+    <!-- Pega da mão / Cabo -->
+    <path class="stroke-line-warm" d="M 15 28 L 27 28" />
+    
+    <!-- Cesto principal -->
+    <path class="stroke-line-warm" d="M 27 28 L 36 62 L 78 62 L 85 36 L 30 36" />
+    
+    <!-- Linhas internas minimalistas -->
+    <path class="stroke-line-warm" d="M 44 36 L 48 54" />
+    <path class="stroke-line-warm" d="M 58 36 L 60 54" />
+    <path class="stroke-line-warm" d="M 72 36 L 70 54" />
+    <path class="stroke-line-warm" d="M 33 48 L 81 48" />
 
-    /* Efeito de brilho pulsante em linhas */
-    @keyframes pulseGlow {
-      0% {
-        stroke: #00f0ff;
-        filter: drop-shadow(0 0 2px #00f0ff);
-        opacity: 0.6;
-      }
-      50% {
-        stroke: #38ef7d;
-        filter: drop-shadow(0 0 10px #38ef7d);
-        opacity: 1;
-      }
-      100% {
-        stroke: #00f0ff;
-        filter: drop-shadow(0 0 15px #00f0ff);
-        opacity: 0.8;
-      }
-    }
-  </style>
-</head>
-<body>
-
-  <div class="cart-container">
-    <svg class="cart-svg" viewBox="0 0 100 100">
-      <!-- Pega da mão / Cabo -->
-      <path class="stroke-line" d="M 15 28 L 27 28" />
-      
-      <!-- Estrutura principal do carrinho (Cesto) -->
-      <path class="stroke-line" d="M 27 28 L 36 62 L 78 62 L 85 36 L 30 36" />
-      
-      <!-- Detalhes das linhas do cesto (Minimalista) -->
-      <path class="stroke-line" d="M 44 36 L 48 54" />
-      <path class="stroke-line" d="M 58 36 L 60 54" />
-      <path class="stroke-line" d="M 72 36 L 70 54" />
-      <path class="stroke-line" d="M 33 48 L 81 48" />
-
-      <!-- Rodas minimalistas (Círculos) -->
-      <circle class="stroke-line" cx="42" cy="73" r="5" />
-      <circle class="stroke-line" cx="72" cy="73" r="5" />
-      
-      <!-- Suporte inferior -->
-      <path class="stroke-line" d="M 39 62 L 42 68" />
-      <path class="stroke-line" d="M 75 62 L 72 68" />
-    </svg>
-  </div>
-
-</body>
-</html>
+    <!-- Rodas -->
+    <circle class="stroke-line-warm" cx="42" cy="73" r="5" />
+    <circle class="stroke-line-warm" cx="72" cy="73" r="5" />
+    
+    <!-- Suporte inferior -->
+    <path class="stroke-line-warm" d="M 39 62 L 42 68" />
+    <path class="stroke-line-warm" d="M 75 62 L 72 68" />
+  </svg>
+</div>
