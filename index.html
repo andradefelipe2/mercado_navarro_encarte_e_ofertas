@@ -1,698 +1,90 @@
 <!DOCTYPE html>
-<html lang="pt-BR" class="scroll-smooth">
+<html lang="pt">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mercado Navarro - Ofertas do Dia</title>
-  
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  
-  <!-- Fontes Google -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Plus Jakarta Sans', 'sans-serif'],
-            display: ['Fredoka', 'sans-serif'],
-          },
-          colors: {
-            brand: {
-              purple: '#1d1740',
-              purpleLight: '#2a225c',
-              purpleDark: '#130f2c',
-              orange: '#ff5722',
-              yellow: '#ffca28',
-              yellowHover: '#ffb300'
-            }
-          }
-        }
-      }
-    }
-  </script>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carrinho de Supermercado Minimalista - Line Art</title>
   <style>
-    /* Estilos personalizados */
-    .bg-grid-pattern {
-      background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
-      background-size: 16px 16px;
+    body {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-color: #0d1117; /* Fundo escuro para destacar as linhas */
     }
-    .custom-scrollbar::-webkit-scrollbar {
-      width: 6px;
+
+    .cart-container {
+      width: 250px;
+      height: 250px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
-    .custom-scrollbar::-webkit-scrollbar-track {
-      background: rgba(0,0,0,0.05);
+
+    .cart-svg {
+      width: 100%;
+      height: 100%;
     }
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-      background: #ff5722;
-      border-radius: 9999px;
+
+    /* Estilo das linhas */
+    .stroke-line {
+      fill: none;
+      stroke: #00f0ff; /* Cor ciano/elétrica */
+      stroke-width: 3.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      
+      /* Animação de pulsação de luz e traço */
+      animation: pulseGlow 2s infinite ease-in-out alternate;
+    }
+
+    /* Efeito de brilho pulsante em linhas */
+    @keyframes pulseGlow {
+      0% {
+        stroke: #00f0ff;
+        filter: drop-shadow(0 0 2px #00f0ff);
+        opacity: 0.6;
+      }
+      50% {
+        stroke: #38ef7d;
+        filter: drop-shadow(0 0 10px #38ef7d);
+        opacity: 1;
+      }
+      100% {
+        stroke: #00f0ff;
+        filter: drop-shadow(0 0 15px #00f0ff);
+        opacity: 0.8;
+      }
     }
   </style>
 </head>
+<body>
 
-<body class="bg-gray-100 dark:bg-gray-950 text-gray-800 dark:text-gray-100 font-sans min-h-screen flex flex-col transition-colors duration-200">
-
-  <!-- ========================================== -->
-  <!-- MODAL INICIAL DE ESCOLHA DA UNIDADE -->
-  <!-- ========================================== -->
-  <div id="unit-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4 transition-all duration-300">
-    <div class="bg-white dark:bg-gray-900 rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-gray-100 dark:border-gray-800 text-center relative overflow-hidden">
+  <div class="cart-container">
+    <svg class="cart-svg" viewBox="0 0 100 100">
+      <!-- Pega da mão / Cabo -->
+      <path class="stroke-line" d="M 15 28 L 27 28" />
       
-      <!-- Detalhe decorativo top -->
-      <div class="absolute -top-12 -left-12 w-28 h-28 bg-brand-orange/10 rounded-full blur-xl"></div>
-      <div class="absolute -bottom-12 -right-12 w-28 h-28 bg-brand-yellow/10 rounded-full blur-xl"></div>
+      <!-- Estrutura principal do carrinho (Cesto) -->
+      <path class="stroke-line" d="M 27 28 L 36 62 L 78 62 L 85 36 L 30 36" />
+      
+      <!-- Detalhes das linhas do cesto (Minimalista) -->
+      <path class="stroke-line" d="M 44 36 L 48 54" />
+      <path class="stroke-line" d="M 58 36 L 60 54" />
+      <path class="stroke-line" d="M 72 36 L 70 54" />
+      <path class="stroke-line" d="M 33 48 L 81 48" />
 
-      <!-- Mascot Avatar Icon -->
-      <div class="w-20 h-20 bg-brand-purple rounded-2xl mx-auto mb-4 flex items-center justify-center shadow-lg border-2 border-brand-orange">
-        <span class="text-3xl font-display font-bold text-white tracking-wider">N</span>
-      </div>
-
-      <h2 class="text-2xl sm:text-3xl font-display font-bold text-brand-purple dark:text-white mb-2">
-        Seja bem-vindo ao Mercado Navarro!
-      </h2>
-      <p class="text-gray-600 dark:text-gray-400 text-sm mb-6">
-        Selecione a unidade de sua preferência para visualizar o encarte de ofertas e horários:
-      </p>
-
-      <div class="space-y-3">
-        <!-- Loja 1 -->
-        <button onclick="selectUnit(1)" class="w-full text-left p-4 rounded-2xl border-2 border-gray-200 dark:border-gray-800 hover:border-brand-orange dark:hover:border-brand-orange bg-gray-50 dark:bg-gray-800/50 hover:bg-orange-50 dark:hover:bg-gray-800 transition-all group flex items-center justify-between">
-          <div>
-            <div class="flex items-center gap-2">
-              <span class="font-bold text-brand-purple dark:text-white group-hover:text-brand-orange transition-colors">Loja 1</span>
-              <span id="modal-badge-store1" class="text-[10px] px-2 py-0.5 rounded-full font-bold"></span>
-            </div>
-            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 flex items-center gap-1">
-              <svg class="w-3.5 h-3.5 text-brand-orange shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-              <span>Rua Antonio Alfredo Campos, 42</span>
-            </p>
-          </div>
-          <svg class="w-5 h-5 text-brand-orange group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-        </button>
-
-        <!-- Loja 2 -->
-        <button onclick="selectUnit(2)" class="w-full text-left p-4 rounded-2xl border-2 border-gray-200 dark:border-gray-800 hover:border-brand-orange dark:hover:border-brand-orange bg-gray-50 dark:bg-gray-800/50 hover:bg-orange-50 dark:hover:bg-gray-800 transition-all group flex items-center justify-between">
-          <div>
-            <div class="flex items-center gap-2">
-              <span class="font-bold text-brand-purple dark:text-white group-hover:text-brand-orange transition-colors">Loja 2</span>
-              <span id="modal-badge-store2" class="text-[10px] px-2 py-0.5 rounded-full font-bold"></span>
-            </div>
-            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 flex items-center gap-1">
-              <svg class="w-3.5 h-3.5 text-brand-orange shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-              <span>Rua São Caetano do Sul, 416</span>
-            </p>
-          </div>
-          <svg class="w-5 h-5 text-brand-orange group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-        </button>
-      </div>
-
-    </div>
+      <!-- Rodas minimalistas (Círculos) -->
+      <circle class="stroke-line" cx="42" cy="73" r="5" />
+      <circle class="stroke-line" cx="72" cy="73" r="5" />
+      
+      <!-- Suporte inferior -->
+      <path class="stroke-line" d="M 39 62 L 42 68" />
+      <path class="stroke-line" d="M 75 62 L 72 68" />
+    </svg>
   </div>
-
-  <!-- ========================================== -->
-  <!-- BARRA DE AVISO SUPERIOR (UNIDADE SELECIONADA) -->
-  <!-- ========================================== -->
-  <div class="bg-brand-purpleDark text-white py-2 px-4 text-xs font-medium border-b border-white/10">
-    <div class="container mx-auto flex flex-wrap items-center justify-between gap-2">
-      <div class="flex items-center gap-2">
-        <svg class="w-4 h-4 text-amber-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-        <span class="text-amber-400">Unidade Atual:</span>
-        <span id="current-unit-name" class="font-bold text-white">Carregando...</span>
-        <span id="top-status-indicator" class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold"></span>
-      </div>
-      
-      <div class="flex items-center gap-3">
-        <button onclick="openUnitModal()" class="text-amber-400 hover:underline flex items-center gap-1">
-          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-          <span>Alterar Loja</span>
-        </button>
-        <span class="text-gray-600">|</span>
-        <!-- Botão Dark / Light Mode -->
-        <button onclick="toggleDarkMode()" id="theme-toggle-btn" class="hover:text-amber-400 flex items-center gap-1" title="Alternar Tema">
-          <span id="theme-icon-container">
-            <svg id="theme-icon-moon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
-          </span>
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ========================================== -->
-  <!-- CABEÇALHO DA PÁGINA -->
-  <!-- ========================================== -->
-  <header class="bg-brand-purple text-white sticky top-0 z-40 shadow-lg border-b border-brand-orange/20">
-    <div class="container mx-auto px-4 py-3 flex items-center justify-between gap-4">
-      
-      <!-- Logo + Marca -->
-      <a href="#" class="flex items-center gap-3 group">
-        <div class="w-10 h-10 bg-brand-orange rounded-xl flex items-center justify-center font-display font-bold text-xl text-white shadow-md group-hover:scale-105 transition-transform">
-          N
-        </div>
-        <div>
-          <span class="font-display font-bold text-lg sm:text-xl tracking-tight block leading-none">
-            Mercado <span class="text-brand-yellow">Navarro</span>
-          </span>
-          <span class="text-[10px] text-gray-300 font-medium">Mais economia, mais qualidade!</span>
-        </div>
-      </a>
-
-      <!-- Menu de Navegação -->
-      <nav class="hidden md:flex items-center gap-6 text-sm font-semibold text-gray-200">
-        <a href="#ofertas" class="hover:text-brand-yellow transition-colors">Ofertas da Semana</a>
-        <a href="#horarios" class="hover:text-brand-yellow transition-colors">Horários</a>
-        <a href="#unidades" class="hover:text-brand-yellow transition-colors">Unidades</a>
-      </nav>
-
-      <!-- Botão do Carrinho -->
-      <button onclick="toggleCartModal()" class="relative bg-brand-orange hover:bg-brand-orange/90 text-white font-bold px-4 py-2 rounded-xl flex items-center gap-2 shadow-md transition-transform active:scale-95">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
-        <span class="hidden sm:inline text-sm">Lista de Compras</span>
-        <span id="cart-count-badge" class="bg-brand-yellow text-brand-purple text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center">0</span>
-      </button>
-
-    </div>
-  </header>
-
-  <!-- ========================================== -->
-  <!-- HERO BANNER DA LOJA ATIVA -->
-  <!-- ========================================== -->
-  <section class="bg-gradient-to-br from-brand-purple via-brand-purpleLight to-brand-purpleDark text-white py-10 px-4 relative overflow-hidden bg-grid-pattern">
-    <div class="container mx-auto max-w-5xl relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
-      
-      <div class="text-center md:text-left space-y-3 max-w-xl">
-        <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md px-3 py-1 rounded-full text-xs font-semibold text-amber-300 border border-white/10">
-          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Encarte Digital em Tempo Real
-        </div>
-        
-        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-display font-bold leading-tight">
-          Ofertas Exclusivas da <br><span class="text-brand-yellow" id="hero-unit-title">Unidade Selecionada</span>
-        </h1>
-        
-        <p class="text-gray-300 text-sm sm:text-base flex items-center justify-center md:justify-start gap-1.5" id="hero-unit-address">
-          <svg class="w-4 h-4 text-brand-orange shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-          <span>Carregando endereço da unidade...</span>
-        </p>
-
-        <!-- Card do Status de Funcionamento -->
-        <div class="pt-2">
-          <div class="inline-flex items-center gap-3 bg-white/5 border border-white/10 p-3 rounded-2xl text-xs">
-            <span id="hero-status-dot" class="w-3 h-3 rounded-full"></span>
-            <div>
-              <span id="hero-status-text" class="font-bold text-sm block">Verificando horário...</span>
-              <span id="hero-status-subtext" class="text-gray-400">...</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card Rápido WhatsApp -->
-      <div class="bg-white/10 backdrop-blur-md border border-white/20 p-5 rounded-3xl w-full max-w-sm text-center space-y-3">
-        <div class="w-12 h-12 bg-emerald-500/20 text-emerald-400 rounded-2xl mx-auto flex items-center justify-center border border-emerald-500/30">
-          <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
-        </div>
-        <h3 class="font-bold text-base">Atendimento via WhatsApp</h3>
-        <p class="text-xs text-gray-300">Tire dúvidas sobre produtos ou envie sua lista diretamente para a unidade.</p>
-        <button onclick="sendGeneralWhatsApp()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2.5 px-4 rounded-xl transition flex items-center justify-center gap-2 shadow-lg">
-          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
-          <span>Falar com o Mercado</span>
-        </button>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ========================================== -->
-  <!-- VITRINE DE OFERTAS DINÂMICAS DO GITHUB -->
-  <!-- ========================================== -->
-  <main id="ofertas" class="flex-1 container mx-auto px-4 py-12 max-w-6xl space-y-12">
-    
-    <div class="text-center max-w-2xl mx-auto space-y-2">
-      <h2 class="text-2xl sm:text-3xl font-display font-bold text-brand-purple dark:text-white flex items-center justify-center gap-2">
-        <svg class="w-7 h-7 text-brand-orange animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z"/></svg>
-        <span>Encarte de Ofertas da Semana</span>
-      </h2>
-      <p class="text-sm text-gray-600 dark:text-gray-400">
-        Confira as imagens das ofertas ativas. Adicione os itens desejados na sua lista e consulte a disponibilidade.
-      </p>
-    </div>
-
-    <!-- SEÇÃO: AÇOUGUE -->
-    <section class="space-y-4">
-      <div class="flex items-center justify-between border-b-2 border-brand-orange/30 pb-2">
-        <h3 class="text-xl font-display font-bold text-brand-purple dark:text-white flex items-center gap-2">
-          <svg class="w-6 h-6 text-brand-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"/></svg>
-          <span>Ofertas do Açougue</span>
-        </h3>
-        <span class="text-xs font-semibold text-brand-orange">Sempre Fresquinho</span>
-      </div>
-      <div id="grid-acougue" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        <!-- Renderizado dinamicamente via JS do GitHub -->
-      </div>
-    </section>
-
-    <!-- SEÇÃO: BEBIDAS -->
-    <section class="space-y-4">
-      <div class="flex items-center justify-between border-b-2 border-brand-orange/30 pb-2">
-        <h3 class="text-xl font-display font-bold text-brand-purple dark:text-white flex items-center gap-2">
-          <svg class="w-6 h-6 text-brand-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
-          <span>Ofertas de Bebidas</span>
-        </h3>
-        <span class="text-xs font-semibold text-brand-orange">Sucos, Refrigerantes e Bebidas</span>
-      </div>
-      <div id="grid-bebidas" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        <!-- Renderizado dinamicamente via JS do GitHub -->
-      </div>
-    </section>
-
-    <!-- SEÇÃO: HORTIFRUTI -->
-    <section class="space-y-4">
-      <div class="flex items-center justify-between border-b-2 border-brand-orange/30 pb-2">
-        <h3 class="text-xl font-display font-bold text-brand-purple dark:text-white flex items-center gap-2">
-          <svg class="w-6 h-6 text-brand-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>
-          <span>Ofertas do Hortifruti</span>
-        </h3>
-        <span class="text-xs font-semibold text-brand-orange">Frutas, Legumes e Verduras</span>
-      </div>
-      <div id="grid-hortifruti" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        <!-- Renderizado dinamicamente via JS do GitHub -->
-      </div>
-    </section>
-
-    <!-- ========================================== -->
-    <!-- HORÁRIOS DE FUNCIONAMENTO (TABELA COMPARATIVA) -->
-    <!-- ========================================== -->
-    <section id="horarios" class="pt-8">
-      <div class="bg-white dark:bg-gray-900 rounded-3xl p-6 sm:p-8 shadow-xl border border-gray-100 dark:border-gray-800 space-y-6">
-        <div class="text-center space-y-1">
-          <h3 class="text-xl font-display font-bold text-brand-purple dark:text-white flex items-center justify-center gap-2">
-            <svg class="w-6 h-6 text-brand-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-            <span>Horário de Funcionamento</span>
-          </h3>
-          <p class="text-xs text-gray-500 dark:text-gray-400">Atendimento presencial em ambas as lojas</p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          
-          <!-- Tabela Loja 1 -->
-          <div class="bg-gray-50 dark:bg-gray-800/50 p-5 rounded-2xl border border-gray-200 dark:border-gray-700 space-y-3">
-            <div class="flex items-center justify-between">
-              <h4 class="font-bold text-brand-purple dark:text-white">Loja 1 - Antonio Alfredo Campos</h4>
-              <span id="table-status-store1" class="text-[10px] px-2 py-0.5 rounded-full font-bold"></span>
-            </div>
-            <ul class="text-xs space-y-1.5 text-gray-600 dark:text-gray-300">
-              <li class="flex justify-between"><span>Segunda a Sábado:</span> <strong class="text-gray-800 dark:text-gray-100">07:30 – 20:00</strong></li>
-              <li class="flex justify-between"><span>Domingo:</span> <strong class="text-gray-800 dark:text-gray-100">08:00 – 14:00</strong></li>
-            </ul>
-          </div>
-
-          <!-- Tabela Loja 2 -->
-          <div class="bg-gray-50 dark:bg-gray-800/50 p-5 rounded-2xl border border-gray-200 dark:border-gray-700 space-y-3">
-            <div class="flex items-center justify-between">
-              <h4 class="font-bold text-brand-purple dark:text-white">Loja 2 - São Caetano do Sul</h4>
-              <span id="table-status-store2" class="text-[10px] px-2 py-0.5 rounded-full font-bold"></span>
-            </div>
-            <ul class="text-xs space-y-1.5 text-gray-600 dark:text-gray-300">
-              <li class="flex justify-between"><span>Segunda a Sábado:</span> <strong class="text-gray-800 dark:text-gray-100">07:00 – 21:00</strong></li>
-              <li class="flex justify-between"><span>Domingo:</span> <strong class="text-gray-800 dark:text-gray-100">08:00 – 15:00</strong></li>
-            </ul>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- ========================================== -->
-  <!-- MODAL DO CARRINHO DE COMPRAS / LISTA -->
-  <!-- ========================================== -->
-  <div id="cart-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex justify-end">
-    <div class="bg-white dark:bg-gray-900 w-full max-w-md h-full shadow-2xl flex flex-col p-6 space-y-4">
-      
-      <div class="flex items-center justify-between border-b pb-3 dark:border-gray-800">
-        <h3 class="text-lg font-display font-bold text-brand-purple dark:text-white flex items-center gap-2">
-          <svg class="w-5 h-5 text-brand-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
-          <span>Minha Lista de Compras</span>
-        </h3>
-        <button onclick="toggleCartModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold">✕</button>
-      </div>
-
-      <p class="text-xs text-gray-500 dark:text-gray-400">
-        Sua lista será enviada para a <strong id="cart-modal-unit-name" class="text-brand-orange">Unidade Selecionada</strong>.
-      </p>
-
-      <!-- Lista de Itens -->
-      <div id="cart-items-container" class="flex-1 overflow-y-auto custom-scrollbar space-y-3 pr-1">
-        <!-- Itens injetados via JS -->
-      </div>
-
-      <!-- Rodapé do Carrinho -->
-      <div class="border-t pt-4 space-y-3 dark:border-gray-800">
-        <div class="flex justify-between font-bold text-sm text-gray-700 dark:text-gray-200">
-          <span>Subtotal estimado:</span>
-          <span class="text-brand-orange">R$ xx,xx</span>
-        </div>
-        <p class="text-[10px] text-gray-400">
-          *Os valores finais e disponibilidade de estoque serão confirmados diretamente pelo atendente da loja no WhatsApp.
-        </p>
-        <button onclick="sendCartToWhatsApp()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 rounded-xl transition flex items-center justify-center gap-2 shadow-lg">
-          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
-          <span>Enviar Lista no WhatsApp</span>
-        </button>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- RODAPÉ -->
-  <footer id="unidades" class="bg-brand-purpleDark text-gray-400 py-8 px-4 border-t border-white/10 text-xs text-center space-y-3">
-    <p class="font-bold text-white text-sm">Mercado Navarro © 2026</p>
-    <p>Loja 1: Rua Antonio Alfredo Campos, 42 | Loja 2: Rua São Caetano do Sul, 416</p>
-    <p class="text-gray-500 text-[10px]">Mais economia e qualidade no seu bairro.</p>
-  </footer>
-
-  <!-- ========================================== -->
-  <!-- JAVASCRIPT PRINCIPAL -->
-  <!-- ========================================== -->
-  <script>
-    // CONFIGURAÇÕES DO REPOSITÓRIO NO GITHUB
-    const GITHUB_USER = "andradefelipe2";
-    const GITHUB_REPO = "encartes_Navarro";
-    const GITHUB_BRANCH = "main";
-
-    // ESTADO DA APLICAÇÃO
-    let activeUnit = localStorage.getItem('navarro_unit') ? parseInt(localStorage.getItem('navarro_unit')) : 1;
-    let cart = JSON.parse(localStorage.getItem('navarro_cart') || '[]');
-
-    // DADOS DAS UNIDADES E HORÁRIOS
-    const STORES = {
-      1: {
-        name: "Loja 1 - Rua Antonio Alfredo Campos",
-        address: "Rua Antonio Alfredo Campos, 42",
-        whatsapp: "5511999999999",
-        hours: {
-          weekday: { open: "07:30", close: "20:00" }, // Seg a Sáb
-          sunday: { open: "08:00", close: "14:00" }     // Dom
-        }
-      },
-      2: {
-        name: "Loja 2 - Rua São Caetano do Sul",
-        address: "Rua São Caetano do Sul, 416",
-        whatsapp: "5511999999999",
-        hours: {
-          weekday: { open: "07:00", close: "21:00" }, // Seg a Sáb
-          sunday: { open: "08:00", close: "15:00" }     // Dom
-        }
-      }
-    };
-
-    // INICIALIZAÇÃO DA PÁGINA
-    document.addEventListener("DOMContentLoaded", () => {
-      initTheme();
-      checkAllStoreStatus();
-      updateSelectedUnitUI();
-      loadAllOfferCategories();
-      updateCartUI();
-
-      if (!localStorage.getItem('navarro_unit')) {
-        openUnitModal();
-      } else {
-        closeUnitModal();
-      }
-
-      setInterval(checkAllStoreStatus, 60000);
-    });
-
-    // SISTEMA DE DARK / LIGHT MODE
-    function initTheme() {
-      const container = document.getElementById('theme-icon-container');
-      if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-        document.documentElement.classList.add('dark');
-        container.innerHTML = `<svg class="w-4 h-4 text-amber-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>`;
-      } else {
-        document.documentElement.classList.remove('dark');
-        container.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>`;
-      }
-    }
-
-    function toggleDarkMode() {
-      const container = document.getElementById('theme-icon-container');
-      if (document.documentElement.classList.contains('dark')) {
-        document.documentElement.classList.remove('dark');
-        localStorage.setItem('theme', 'light');
-        container.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>`;
-      } else {
-        document.documentElement.classList.add('dark');
-        localStorage.setItem('theme', 'dark');
-        container.innerHTML = `<svg class="w-4 h-4 text-amber-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>`;
-      }
-    }
-
-    // CÁLCULO DE STATUS (ABERTO / FECHADO)
-    function isStoreOpen(storeId) {
-      const now = new Date();
-      const day = now.getDay();
-      const currentMinutes = now.getHours() * 60 + now.getMinutes();
-
-      const store = STORES[storeId];
-      const schedule = (day === 0) ? store.hours.sunday : store.hours.weekday;
-
-      const [openH, openM] = schedule.open.split(':').map(Number);
-      const [closeH, closeM] = schedule.close.split(':').map(Number);
-
-      const openMinutes = openH * 60 + openM;
-      const closeMinutes = closeH * 60 + closeM;
-
-      return {
-        isOpen: currentMinutes >= openMinutes && currentMinutes < closeMinutes,
-        openTime: schedule.open,
-        closeTime: schedule.close
-      };
-    }
-
-    function checkAllStoreStatus() {
-      for (let id of [1, 2]) {
-        const status = isStoreOpen(id);
-        const modalBadge = document.getElementById(`modal-badge-store${id}`);
-        const tableStatus = document.getElementById(`table-status-store${id}`);
-
-        const bgClass = status.isOpen ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300' : 'bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300';
-        const labelText = status.isOpen ? 'ABERTO AGORA' : 'FECHADO';
-
-        if (modalBadge) {
-          modalBadge.className = `text-[10px] px-2 py-0.5 rounded-full font-bold ${bgClass}`;
-          modalBadge.innerText = labelText;
-        }
-        if (tableStatus) {
-          tableStatus.className = `text-[10px] px-2 py-0.5 rounded-full font-bold ${bgClass}`;
-          tableStatus.innerText = labelText;
-        }
-      }
-
-      updateActiveStoreStatusUI();
-    }
-
-    function updateActiveStoreStatusUI() {
-      const status = isStoreOpen(activeUnit);
-      const topIndicator = document.getElementById('top-status-indicator');
-      const heroDot = document.getElementById('hero-status-dot');
-      const heroText = document.getElementById('hero-status-text');
-      const heroSubtext = document.getElementById('hero-status-subtext');
-
-      if (status.isOpen) {
-        topIndicator.className = 'inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30';
-        topIndicator.innerText = 'Aberto';
-
-        heroDot.className = 'w-3 h-3 rounded-full bg-emerald-400 animate-pulse';
-        heroText.innerText = 'ABERTO AGORA';
-        heroText.className = 'font-bold text-sm text-emerald-400';
-        heroSubtext.innerText = `Hoje fecha às ${status.closeTime}`;
-      } else {
-        topIndicator.className = 'inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30';
-        topIndicator.innerText = 'Fechado';
-
-        heroDot.className = 'w-3 h-3 rounded-full bg-rose-500';
-        heroText.innerText = 'FECHADO NO MOMENTO';
-        heroText.className = 'font-bold text-sm text-rose-400';
-        heroSubtext.innerText = `Abre novamente às ${status.openTime}`;
-      }
-    }
-
-    // MODAL DE UNIDADE
-    function openUnitModal() {
-      document.getElementById('unit-modal').classList.remove('hidden');
-    }
-
-    function closeUnitModal() {
-      document.getElementById('unit-modal').classList.add('hidden');
-    }
-
-    function selectUnit(unitId) {
-      activeUnit = unitId;
-      localStorage.setItem('navarro_unit', unitId);
-      closeUnitModal();
-      updateSelectedUnitUI();
-    }
-
-    function updateSelectedUnitUI() {
-      const store = STORES[activeUnit];
-      document.getElementById('current-unit-name').innerText = store.name;
-      document.getElementById('hero-unit-title').innerText = store.name;
-      document.getElementById('hero-unit-address').innerHTML = `
-        <svg class="w-4 h-4 text-brand-orange shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-        <span>${store.address}</span>
-      `;
-      document.getElementById('cart-modal-unit-name').innerText = store.name;
-      updateActiveStoreStatusUI();
-    }
-
-    // CARREGAMENTO DAS FOTOS DO GITHUB
-    async function loadCategoryImages(folderName, gridId) {
-      const container = document.getElementById(gridId);
-      container.innerHTML = '<p class="col-span-full text-xs text-gray-400 text-center py-6 animate-pulse">Buscando ofertas atualizadas do mercado...</p>';
-
-      try {
-        const apiUrl = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/assets/${folderName}?ref=${GITHUB_BRANCH}`;
-        const response = await fetch(apiUrl);
-
-        if (!response.ok) throw new Error("Pasta não encontrada");
-
-        const data = await response.json();
-        const imageFiles = data.filter(file => file.name.match(/\.(jpg|jpeg|png|webp)$/i));
-
-        if (imageFiles.length === 0) {
-          container.innerHTML = '<div class="col-span-full text-center py-8 bg-white dark:bg-gray-900 rounded-2xl border border-dashed border-gray-200 dark:border-gray-800"><p class="text-xs text-gray-400">Nenhuma oferta cadastrada nesta categoria no momento.</p></div>';
-          return;
-        }
-
-        container.innerHTML = "";
-
-        imageFiles.forEach((file) => {
-          const rawUrl = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${GITHUB_BRANCH}/assets/${folderName}/${file.name}?v=${new Date().getTime()}`;
-          const itemName = file.name.replace(/\.[^/.]+$/, "").replace(/[-_]/g, " ");
-
-          const card = document.createElement('div');
-          card.className = "bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-md border border-gray-100 dark:border-gray-800 flex flex-col group hover:shadow-xl transition";
-          
-          card.innerHTML = `
-            <div class="relative bg-gray-50 dark:bg-gray-800 overflow-hidden aspect-square">
-              <img src="${rawUrl}" alt="${itemName}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
-              <div class="absolute top-2 right-2 bg-brand-orange text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow flex items-center gap-1">
-                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>
-                <span>Oferta</span>
-              </div>
-            </div>
-            
-            <div class="p-4 flex flex-col flex-1 justify-between space-y-3">
-              <div>
-                <h4 class="font-bold text-sm text-gray-800 dark:text-white capitalize line-clamp-1">${itemName}</h4>
-                <p class="text-xs text-brand-orange font-bold mt-0.5">R$ xx,xx</p>
-              </div>
-
-              <button onclick="addToCart('${folderName} - ${itemName}')" class="w-full bg-brand-purple hover:bg-brand-purpleLight dark:bg-gray-800 dark:hover:bg-gray-700 text-white font-bold py-2 rounded-xl text-xs transition flex items-center justify-center gap-1.5">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                <span>Adicionar à Lista</span>
-              </button>
-            </div>
-          `;
-
-          container.appendChild(card);
-        });
-
-      } catch (err) {
-        console.error(`Erro ao carregar ${folderName}:`, err);
-        container.innerHTML = '<div class="col-span-full text-center py-6 bg-gray-50 dark:bg-gray-800/50 rounded-2xl text-xs text-gray-400">Adicione imagens nesta pasta do GitHub para publicar ofertas.</div>';
-      }
-    }
-
-    function loadAllOfferCategories() {
-      loadCategoryImages("acougue", "grid-acougue");
-      loadCategoryImages("Bebidas", "grid-bebidas");
-      loadCategoryImages("hortifruti", "grid-hortifruti");
-    }
-
-    // LÓGICA DO CARRINHO / LISTA DE COMPRAS
-    function toggleCartModal() {
-      const modal = document.getElementById('cart-modal');
-      modal.classList.toggle('hidden');
-    }
-
-    function addToCart(itemName) {
-      cart.push(itemName);
-      localStorage.setItem('navarro_cart', JSON.stringify(cart));
-      updateCartUI();
-      toggleCartModal();
-    }
-
-    function removeFromCart(index) {
-      cart.splice(index, 1);
-      localStorage.setItem('navarro_cart', JSON.stringify(cart));
-      updateCartUI();
-    }
-
-    function updateCartUI() {
-      const badge = document.getElementById('cart-count-badge');
-      const container = document.getElementById('cart-items-container');
-
-      badge.innerText = cart.length;
-
-      if (cart.length === 0) {
-        container.innerHTML = `
-          <div class="text-center py-12 text-gray-400 space-y-2">
-            <svg class="w-12 h-12 mx-auto text-gray-300 dark:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
-            <p class="text-xs font-medium">Sua lista de compras está vazia.</p>
-            <p class="text-[10px]">Navegue pelas ofertas e adicione itens para consultar via WhatsApp.</p>
-          </div>
-        `;
-        return;
-      }
-
-      container.innerHTML = "";
-      cart.forEach((item, index) => {
-        const row = document.createElement('div');
-        row.className = "flex items-center justify-between bg-gray-50 dark:bg-gray-800 p-3 rounded-xl border border-gray-100 dark:border-gray-700 text-xs";
-        row.innerHTML = `
-          <div class="flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full bg-brand-orange"></span>
-            <span class="font-medium text-gray-800 dark:text-gray-200 capitalize">${item}</span>
-          </div>
-          <button onclick="removeFromCart(${index})" class="text-rose-500 hover:text-rose-700 font-bold px-2 py-1">✕</button>
-        `;
-        container.appendChild(row);
-      });
-    }
-
-    // ENVIO VIA WHATSAPP
-    function sendGeneralWhatsApp() {
-      const store = STORES[activeUnit];
-      const msg = `Olá! Gostaria de tirar uma dúvida sobre a *${store.name}*.`;
-      window.open(`https://wa.me/${store.whatsapp}?text=${encodeURIComponent(msg)}`, '_blank');
-    }
-
-    function sendCartToWhatsApp() {
-      if (cart.length === 0) {
-        alert("Sua lista de compras está vazia!");
-        return;
-      }
-
-      const store = STORES[activeUnit];
-      let msg = `Olá, *${store.name}*!\n`;
-      msg += `Gostaria de verificar a disponibilidade e os valores dos seguintes itens da minha lista:\n\n`;
-
-      cart.forEach((item, idx) => {
-        msg += `${idx + 1}. *${item}* - R$ xx,xx\n`;
-      });
-
-      msg += `\nAguardo o retorno para prosseguir. Obrigado!`;
-      window.open(`https://wa.me/${store.whatsapp}?text=${encodeURIComponent(msg)}`, '_blank');
-    }
-  </script>
 
 </body>
 </html>
