@@ -1,76 +1,674 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="scroll-smooth">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mercado Navarro - Encarte da Semana</title>
+  <title>Mercado Navarro - Ofertas do Dia</title>
+  
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Fontes Google -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+            display: ['Fredoka', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              purple: '#1d1740',
+              purpleLight: '#2a225c',
+              purpleDark: '#130f2c',
+              orange: '#ff5722',
+              yellow: '#ffca28',
+              yellowHover: '#ffb300'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
   <style>
-    .bg-navarro { background-color: #1d1740; }
-    .text-navarro { color: #1d1740; }
+    /* Estilos personalizados */
+    .bg-grid-pattern {
+      background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+      background-size: 16px 16px;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: rgba(0,0,0,0.05);
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #ff5722;
+      border-radius: 9999px;
+    }
   </style>
 </head>
-<body class="bg-gray-100 text-gray-800 font-sans min-h-screen flex flex-col">
 
-  <!-- Cabeçalho -->
-  <header class="bg-navarro text-white py-4 px-6 shadow-md text-center">
-    <h1 class="text-2xl font-bold tracking-wide">MERCADO NAVARRO</h1>
-    <p class="text-xs text-amber-400 font-medium">Mais economia, mais qualidade!</p>
-  </header>
+<body class="bg-gray-100 dark:bg-gray-950 text-gray-800 dark:text-gray-100 font-sans min-h-screen flex flex-col transition-colors duration-200">
 
-  <!-- Container do Encarte -->
-  <main class="flex-1 container mx-auto px-4 py-8 max-w-3xl">
-    <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-200">
+  <!-- ========================================== -->
+  <!-- MODAL INICIAL DE ESCOLHA DA UNIDADE -->
+  <!-- ========================================== -->
+  <div id="unit-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4 transition-all duration-300">
+    <div class="bg-white dark:bg-gray-900 rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-gray-100 dark:border-gray-800 text-center relative overflow-hidden">
       
-      <div class="p-4 bg-amber-500 text-white text-center font-bold text-lg flex items-center justify-center gap-2">
-        <span>🔥</span> ENCARTE DE OFERTAS DA SEMANA <span>🔥</span>
+      <!-- Detalhe decorativo top -->
+      <div class="absolute -top-12 -left-12 w-28 h-28 bg-brand-orange/10 rounded-full blur-xl"></div>
+      <div class="absolute -bottom-12 -right-12 w-28 h-28 bg-brand-yellow/10 rounded-full blur-xl"></div>
+
+      <!-- Mascot Avatar Icon -->
+      <div class="w-20 h-20 bg-brand-purple rounded-2xl mx-auto mb-4 flex items-center justify-center shadow-lg border-2 border-brand-orange">
+        <span class="text-3xl font-display font-bold text-white tracking-wider">N</span>
       </div>
 
-      <!-- Área da Imagem -->
-      <div class="p-4 text-center bg-gray-50 min-h-[400px] flex items-center justify-center relative">
-        <img 
-          id="img-encarte" 
-          src="" 
-          alt="Encarte de Ofertas Mercado Navarro" 
-          class="w-full h-auto rounded-lg shadow-sm hidden"
-          onload="this.classList.remove('hidden'); document.getElementById('loading').classList.add('hidden');"
-          onerror="this.classList.add('hidden'); document.getElementById('erro-encarte').classList.remove('hidden'); document.getElementById('loading').classList.add('hidden');"
-        />
+      <h2 class="text-2xl sm:text-3xl font-display font-bold text-brand-purple dark:text-white mb-2">
+        Seja bem-vindo ao Mercado Navarro!
+      </h2>
+      <p class="text-gray-600 dark:text-gray-400 text-sm mb-6">
+        Selecione a unidade de sua preferência para visualizar o encarte de ofertas e horários:
+      </p>
 
-        <!-- Loading -->
-        <div id="loading" class="text-gray-500 text-sm animate-pulse">
-          Carregando encarte atualizado...
-        </div>
+      <div class="space-y-3">
+        <!-- Loja 1 -->
+        <button onclick="selectUnit(1)" class="w-full text-left p-4 rounded-2xl border-2 border-gray-200 dark:border-gray-800 hover:border-brand-orange dark:hover:border-brand-orange bg-gray-50 dark:bg-gray-800/50 hover:bg-orange-50 dark:hover:bg-gray-800 transition-all group flex items-center justify-between">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="font-bold text-brand-purple dark:text-white group-hover:text-brand-orange transition-colors">Loja 1</span>
+              <span id="modal-badge-store1" class="text-[10px] px-2 py-0.5 rounded-full font-bold"></span>
+            </div>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">📍 Rua Antonio Alfredo Campos, 42</p>
+          </div>
+          <span class="text-brand-orange font-bold text-lg group-hover:translate-x-1 transition-transform">→</span>
+        </button>
 
-        <!-- Fallback de Erro / Sem imagem -->
-        <div id="erro-encarte" class="hidden text-gray-500 p-8">
-          <p class="text-base font-semibold">Estamos preparando as novas ofertas da semana!</p>
-          <p class="text-xs mt-1">Volte em instantes para conferir as promoções.</p>
-        </div>
-      </div>
-
-      <!-- Rodapé do Card -->
-      <div class="p-4 bg-gray-100 text-center text-xs text-gray-600 border-t">
-        <p class="font-semibold">Unidade 1: Rua Antonio Alfredo Campos, 42</p>
-        <p class="font-semibold">Unidade 2: Rua São Caetano do Sul, 416</p>
+        <!-- Loja 2 -->
+        <button onclick="selectUnit(2)" class="w-full text-left p-4 rounded-2xl border-2 border-gray-200 dark:border-gray-800 hover:border-brand-orange dark:hover:border-brand-orange bg-gray-50 dark:bg-gray-800/50 hover:bg-orange-50 dark:hover:bg-gray-800 transition-all group flex items-center justify-between">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="font-bold text-brand-purple dark:text-white group-hover:text-brand-orange transition-colors">Loja 2</span>
+              <span id="modal-badge-store2" class="text-[10px] px-2 py-0.5 rounded-full font-bold"></span>
+            </div>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">📍 Rua São Caetano do Sul, 416</p>
+          </div>
+          <span class="text-brand-orange font-bold text-lg group-hover:translate-x-1 transition-transform">→</span>
+        </button>
       </div>
 
     </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- BARRA DE AVISO SUPERIOR (UNIDADE SELECIONADA) -->
+  <!-- ========================================== -->
+  <div class="bg-brand-purpleDark text-white py-2 px-4 text-xs font-medium border-b border-white/10">
+    <div class="container mx-auto flex flex-wrap items-center justify-between gap-2">
+      <div class="flex items-center gap-2">
+        <span class="text-amber-400">📍 Unidade Atual:</span>
+        <span id="current-unit-name" class="font-bold text-white">Carregando...</span>
+        <span id="top-status-indicator" class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold"></span>
+      </div>
+      
+      <div class="flex items-center gap-3">
+        <button onclick="openUnitModal()" class="text-amber-400 hover:underline flex items-center gap-1">
+          <span>🔄 Alterar Loja</span>
+        </button>
+        <span class="text-gray-600">|</span>
+        <!-- Botão Dark / Light Mode -->
+        <button onclick="toggleDarkMode()" id="theme-toggle-btn" class="hover:text-amber-400 flex items-center gap-1" title="Alternar Tema">
+          <span id="theme-icon">🌙</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- CABEÇALHO DA PÁGINA -->
+  <!-- ========================================== -->
+  <header class="bg-brand-purple text-white sticky top-0 z-40 shadow-lg border-b border-brand-orange/20">
+    <div class="container mx-auto px-4 py-3 flex items-center justify-between gap-4">
+      
+      <!-- Logo + Marca -->
+      <a href="#" class="flex items-center gap-3 group">
+        <div class="w-10 h-10 bg-brand-orange rounded-xl flex items-center justify-center font-display font-bold text-xl text-white shadow-md group-hover:scale-105 transition-transform">
+          N
+        </div>
+        <div>
+          <span class="font-display font-bold text-lg sm:text-xl tracking-tight block leading-none">
+            Mercado <span class="text-brand-yellow">Navarro</span>
+          </span>
+          <span class="text-[10px] text-gray-300 font-medium">Mais economia, mais qualidade!</span>
+        </div>
+      </a>
+
+      <!-- Menu de Navegação -->
+      <nav class="hidden md:flex items-center gap-6 text-sm font-semibold text-gray-200">
+        <a href="#ofertas" class="hover:text-brand-yellow transition-colors">Ofertas da Semana</a>
+        <a href="#horarios" class="hover:text-brand-yellow transition-colors">Horários</a>
+        <a href="#unidades" class="hover:text-brand-yellow transition-colors">Unidades</a>
+      </nav>
+
+      <!-- Botão do Carrinho -->
+      <button onclick="toggleCartModal()" class="relative bg-brand-orange hover:bg-brand-orange/90 text-white font-bold px-4 py-2 rounded-xl flex items-center gap-2 shadow-md transition-transform active:scale-95">
+        <span>🛒</span>
+        <span class="hidden sm:inline text-sm">Lista de Compras</span>
+        <span id="cart-count-badge" class="bg-brand-yellow text-brand-purple text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center">0</span>
+      </button>
+
+    </div>
+  </header>
+
+  <!-- ========================================== -->
+  <!-- HERO BANNER DA LOJA ATIVA -->
+  <!-- ========================================== -->
+  <section class="bg-gradient-to-br from-brand-purple via-brand-purpleLight to-brand-purpleDark text-white py-10 px-4 relative overflow-hidden bg-grid-pattern">
+    <div class="container mx-auto max-w-5xl relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
+      
+      <div class="text-center md:text-left space-y-3 max-w-xl">
+        <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md px-3 py-1 rounded-full text-xs font-semibold text-amber-300 border border-white/10">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Encarte Digital em Tempo Real
+        </div>
+        
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-display font-bold leading-tight">
+          Ofertas Exclusivas da <br><span class="text-brand-yellow" id="hero-unit-title">Unidade Selecionada</span>
+        </h1>
+        
+        <p class="text-gray-300 text-sm sm:text-base" id="hero-unit-address">
+          📍 Carregando endereço da unidade...
+        </p>
+
+        <!-- Card do Status de Funcionamento -->
+        <div class="pt-2">
+          <div class="inline-flex items-center gap-3 bg-white/5 border border-white/10 p-3 rounded-2xl text-xs">
+            <span id="hero-status-dot" class="w-3 h-3 rounded-full"></span>
+            <div>
+              <span id="hero-status-text" class="font-bold text-sm block">Verificando horário...</span>
+              <span id="hero-status-subtext" class="text-gray-400">...</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card Rápido WhatsApp -->
+      <div class="bg-white/10 backdrop-blur-md border border-white/20 p-5 rounded-3xl w-full max-w-sm text-center space-y-3">
+        <span class="text-3xl">📱</span>
+        <h3 class="font-bold text-base">Atendimento via WhatsApp</h3>
+        <p class="text-xs text-gray-300">Tire dúvidas sobre produtos ou envie sua lista diretamente para a unidade.</p>
+        <button onclick="sendGeneralWhatsApp()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2.5 px-4 rounded-xl transition flex items-center justify-center gap-2 shadow-lg">
+          <span>Falar com o Mercado</span>
+        </button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================== -->
+  <!-- VITRINE DE OFERTAS DINÂMICAS DO GITHUB -->
+  <!-- ========================================== -->
+  <main id="ofertas" class="flex-1 container mx-auto px-4 py-12 max-w-6xl space-y-12">
+    
+    <div class="text-center max-w-2xl mx-auto space-y-2">
+      <h2 class="text-2xl sm:text-3xl font-display font-bold text-brand-purple dark:text-white">
+        🔥 Encarte de Ofertas da Semana
+      </h2>
+      <p class="text-sm text-gray-600 dark:text-gray-400">
+        Confira as imagens das ofertas ativas. Adicione os itens desejados na sua lista e consulte a disponibilidade.
+      </p>
+    </div>
+
+    <!-- SEÇÃO: AÇOUGUE -->
+    <section class="space-y-4">
+      <div class="flex items-center justify-between border-b-2 border-brand-orange/30 pb-2">
+        <h3 class="text-xl font-display font-bold text-brand-purple dark:text-white flex items-center gap-2">
+          <span>🥩</span> Ofertas do Açougue
+        </h3>
+        <span class="text-xs font-semibold text-brand-orange">Sempre Fresquinho</span>
+      </div>
+      <div id="grid-acougue" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <!-- Renderizado dinamicamente via JS do GitHub -->
+      </div>
+    </section>
+
+    <!-- SEÇÃO: BEBIDAS -->
+    <section class="space-y-4">
+      <div class="flex items-center justify-between border-b-2 border-brand-orange/30 pb-2">
+        <h3 class="text-xl font-display font-bold text-brand-purple dark:text-white flex items-center gap-2">
+          <span>🥤</span> Ofertas de Bebidas
+        </h3>
+        <span class="text-xs font-semibold text-brand-orange">Sucos, Refrigerantes e Bebidas</span>
+      </div>
+      <div id="grid-bebidas" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <!-- Renderizado dinamicamente via JS do GitHub -->
+      </div>
+    </section>
+
+    <!-- SEÇÃO: HORTIFRUTI -->
+    <section class="space-y-4">
+      <div class="flex items-center justify-between border-b-2 border-brand-orange/30 pb-2">
+        <h3 class="text-xl font-display font-bold text-brand-purple dark:text-white flex items-center gap-2">
+          <span>🍎</span> Ofertas do Hortifruti
+        </h3>
+        <span class="text-xs font-semibold text-brand-orange">Frutas, Legumes e Verduras</span>
+      </div>
+      <div id="grid-hortifruti" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <!-- Renderizado dinamicamente via JS do GitHub -->
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- HORÁRIOS DE FUNCIONAMENTO (TABELA COMPARATIVA) -->
+    <!-- ========================================== -->
+    <section id="horarios" class="pt-8">
+      <div class="bg-white dark:bg-gray-900 rounded-3xl p-6 sm:p-8 shadow-xl border border-gray-100 dark:border-gray-800 space-y-6">
+        <div class="text-center space-y-1">
+          <h3 class="text-xl font-display font-bold text-brand-purple dark:text-white">
+            ⏰ Horário de Funcionamento
+          </h3>
+          <p class="text-xs text-gray-500 dark:text-gray-400">Atendimento presencial em ambas as lojas</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          
+          <!-- Tabela Loja 1 -->
+          <div class="bg-gray-50 dark:bg-gray-800/50 p-5 rounded-2xl border border-gray-200 dark:border-gray-700 space-y-3">
+            <div class="flex items-center justify-between">
+              <h4 class="font-bold text-brand-purple dark:text-white">Loja 1 - Antonio Alfredo Campos</h4>
+              <span id="table-status-store1" class="text-[10px] px-2 py-0.5 rounded-full font-bold"></span>
+            </div>
+            <ul class="text-xs space-y-1.5 text-gray-600 dark:text-gray-300">
+              <li class="flex justify-between"><span>Segunda a Sábado:</span> <strong class="text-gray-800 dark:text-gray-100">07:30 – 20:00</strong></li>
+              <li class="flex justify-between"><span>Domingo:</span> <strong class="text-gray-800 dark:text-gray-100">08:00 – 14:00</strong></li>
+            </ul>
+          </div>
+
+          <!-- Tabela Loja 2 -->
+          <div class="bg-gray-50 dark:bg-gray-800/50 p-5 rounded-2xl border border-gray-200 dark:border-gray-700 space-y-3">
+            <div class="flex items-center justify-between">
+              <h4 class="font-bold text-brand-purple dark:text-white">Loja 2 - São Caetano do Sul</h4>
+              <span id="table-status-store2" class="text-[10px] px-2 py-0.5 rounded-full font-bold"></span>
+            </div>
+            <ul class="text-xs space-y-1.5 text-gray-600 dark:text-gray-300">
+              <li class="flex justify-between"><span>Segunda a Sábado:</span> <strong class="text-gray-800 dark:text-gray-100">07:00 – 21:00</strong></li>
+              <li class="flex justify-between"><span>Domingo:</span> <strong class="text-gray-800 dark:text-gray-100">08:00 – 15:00</strong></li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
   </main>
 
+  <!-- ========================================== -->
+  <!-- MODAL DO CARRINHO DE COMPRAS / LISTA -->
+  <!-- ========================================== -->
+  <div id="cart-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex justify-end">
+    <div class="bg-white dark:bg-gray-900 w-full max-w-md h-full shadow-2xl flex flex-col p-6 space-y-4">
+      
+      <div class="flex items-center justify-between border-b pb-3 dark:border-gray-800">
+        <h3 class="text-lg font-display font-bold text-brand-purple dark:text-white flex items-center gap-2">
+          <span>🛒</span> Minha Lista de Compras
+        </h3>
+        <button onclick="toggleCartModal()" class="text-gray-400 hover:text-gray-600 text-xl font-bold">✕</button>
+      </div>
+
+      <p class="text-xs text-gray-500 dark:text-gray-400">
+        Sua lista será enviada para a <strong id="cart-modal-unit-name" class="text-brand-orange">Unidade Selecionada</strong>.
+      </p>
+
+      <!-- Lista de Itens -->
+      <div id="cart-items-container" class="flex-1 overflow-y-auto custom-scrollbar space-y-3 pr-1">
+        <!-- Itens injetados via JS -->
+      </div>
+
+      <!-- Rodapé do Carrinho -->
+      <div class="border-t pt-4 space-y-3 dark:border-gray-800">
+        <div class="flex justify-between font-bold text-sm text-gray-700 dark:text-gray-200">
+          <span>Subtotal estimado:</span>
+          <span class="text-brand-orange">R$ xx,xx</span>
+        </div>
+        <p class="text-[10px] text-gray-400">
+          *Os valores finais e disponibilidade de estoque serão confirmados diretamente pelo atendente da loja no WhatsApp.
+        </p>
+        <button onclick="sendCartToWhatsApp()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 rounded-xl transition flex items-center justify-center gap-2 shadow-lg">
+          <span>📱 Enviar Lista no WhatsApp</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- RODAPÉ -->
+  <footer id="unidades" class="bg-brand-purpleDark text-gray-400 py-8 px-4 border-t border-white/10 text-xs text-center space-y-3">
+    <p class="font-bold text-white text-sm">Mercado Navarro © 2026</p>
+    <p>Loja 1: Rua Antonio Alfredo Campos, 42 | Loja 2: Rua São Caetano do Sul, 416</p>
+    <p class="text-gray-500 text-[10px]">Mais economia e qualidade no seu bairro.</p>
+  </footer>
+
+  <!-- ========================================== -->
+  <!-- JAVASCRIPT PRINCIPAL -->
+  <!-- ========================================== -->
   <script>
-    // Lógica 100% GitHub com Cache-Busting
-    document.addEventListener("DOMContentLoaded", function() {
-      const imgElement = document.getElementById("img-encarte");
-      
-      // Caminho relativo para a imagem dentro da pasta assets do GitHub
-      const caminhoEncarte = "./assets/encarte.png";
-      
-      // Força o navegador a buscar a imagem mais recente no GitHub
-      const cacheBuster = "?v=" + new Date().getTime();
-      
-      imgElement.src = caminhoEncarte + cacheBuster;
+    // CONFIGURAÇÕES DO REPOSITÓRIO NO GITHUB
+    const GITHUB_USER = "andradefelipe2";
+    const GITHUB_REPO = "encartes_Navarro";
+    const GITHUB_BRANCH = "main";
+
+    // ESTADO DA APLICAÇÃO
+    let activeUnit = localStorage.getItem('navarro_unit') ? parseInt(localStorage.getItem('navarro_unit')) : 1;
+    let cart = JSON.parse(localStorage.getItem('navarro_cart') || '[]');
+
+    // DADOS DAS UNIDADES E HORÁRIOS
+    const STORES = {
+      1: {
+        name: "Loja 1 - Rua Antonio Alfredo Campos",
+        address: "Rua Antonio Alfredo Campos, 42",
+        whatsapp: "5511999999999", // Substituir pelo número real se desejar
+        hours: {
+          weekday: { open: "07:30", close: "20:00" }, // Seg a Sáb
+          sunday: { open: "08:00", close: "14:00" }     // Dom
+        }
+      },
+      2: {
+        name: "Loja 2 - Rua São Caetano do Sul",
+        address: "Rua São Caetano do Sul, 416",
+        whatsapp: "5511999999999", // Substituir pelo número real se desejar
+        hours: {
+          weekday: { open: "07:00", close: "21:00" }, // Seg a Sáb
+          sunday: { open: "08:00", close: "15:00" }     // Dom
+        }
+      }
+    };
+
+    // INICIALIZAÇÃO DA PÁGINA
+    document.addEventListener("DOMContentLoaded", () => {
+      initTheme();
+      checkAllStoreStatus();
+      updateSelectedUnitUI();
+      loadAllOfferCategories();
+      updateCartUI();
+
+      // Se ainda não escolheu a unidade antes, exibe o modal
+      if (!localStorage.getItem('navarro_unit')) {
+        openUnitModal();
+      } else {
+        closeUnitModal();
+      }
+
+      // Atualiza o status de horário a cada 60 segundos
+      setInterval(checkAllStoreStatus, 60000);
     });
+
+    // SISTEMA DE DARK / LIGHT MODE
+    function initTheme() {
+      if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+        document.getElementById('theme-icon').innerText = '☀️';
+      } else {
+        document.documentElement.classList.remove('dark');
+        document.getElementById('theme-icon').innerText = '🌙';
+      }
+    }
+
+    function toggleDarkMode() {
+      if (document.documentElement.classList.contains('dark')) {
+        document.documentElement.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
+        document.getElementById('theme-icon').innerText = '🌙';
+      } else {
+        document.documentElement.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+        document.getElementById('theme-icon').innerText = '☀️';
+      }
+    }
+
+    // CÁLCULO DE STATUS (ABERTO / FECHADO)
+    function isStoreOpen(storeId) {
+      const now = new Date();
+      const day = now.getDay(); // 0 = Domingo
+      const currentMinutes = now.getHours() * 60 + now.getMinutes();
+
+      const store = STORES[storeId];
+      const schedule = (day === 0) ? store.hours.sunday : store.hours.weekday;
+
+      const [openH, openM] = schedule.open.split(':').map(Number);
+      const [closeH, closeM] = schedule.close.split(':').map(Number);
+
+      const openMinutes = openH * 60 + openM;
+      const closeMinutes = closeH * 60 + closeM;
+
+      return {
+        isOpen: currentMinutes >= openMinutes && currentMinutes < closeMinutes,
+        openTime: schedule.open,
+        closeTime: schedule.close
+      };
+    }
+
+    function checkAllStoreStatus() {
+      // Atualiza badges das duas lojas
+      for (let id of [1, 2]) {
+        const status = isStoreOpen(id);
+        const modalBadge = document.getElementById(`modal-badge-store${id}`);
+        const tableStatus = document.getElementById(`table-status-store${id}`);
+
+        const bgClass = status.isOpen ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300' : 'bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300';
+        const labelText = status.isOpen ? '● ABERTO AGORA' : '○ FECHADO';
+
+        if (modalBadge) {
+          modalBadge.className = `text-[10px] px-2 py-0.5 rounded-full font-bold ${bgClass}`;
+          modalBadge.innerText = labelText;
+        }
+        if (tableStatus) {
+          tableStatus.className = `text-[10px] px-2 py-0.5 rounded-full font-bold ${bgClass}`;
+          tableStatus.innerText = labelText;
+        }
+      }
+
+      // Atualiza Hero e Topbar para a unidade ativa
+      updateActiveStoreStatusUI();
+    }
+
+    function updateActiveStoreStatusUI() {
+      const status = isStoreOpen(activeUnit);
+      const topIndicator = document.getElementById('top-status-indicator');
+      const heroDot = document.getElementById('hero-status-dot');
+      const heroText = document.getElementById('hero-status-text');
+      const heroSubtext = document.getElementById('hero-status-subtext');
+
+      if (status.isOpen) {
+        topIndicator.className = 'inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30';
+        topIndicator.innerText = '● Aberto';
+
+        heroDot.className = 'w-3 h-3 rounded-full bg-emerald-400 animate-pulse';
+        heroText.innerText = 'ABERTO AGORA';
+        heroText.className = 'font-bold text-sm text-emerald-400';
+        heroSubtext.innerText = `Hoje fecha às ${status.closeTime}`;
+      } else {
+        topIndicator.className = 'inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30';
+        topIndicator.innerText = '○ Fechado';
+
+        heroDot.className = 'w-3 h-3 rounded-full bg-rose-500';
+        heroText.innerText = 'FECHADO NO MOMENTO';
+        heroText.className = 'font-bold text-sm text-rose-400';
+        heroSubtext.innerText = `Abre novamente às ${status.openTime}`;
+      }
+    }
+
+    // MODAL DE UNIDADE
+    function openUnitModal() {
+      document.getElementById('unit-modal').classList.remove('hidden');
+    }
+
+    function closeUnitModal() {
+      document.getElementById('unit-modal').classList.add('hidden');
+    }
+
+    function selectUnit(unitId) {
+      activeUnit = unitId;
+      localStorage.setItem('navarro_unit', unitId);
+      closeUnitModal();
+      updateSelectedUnitUI();
+    }
+
+    function updateSelectedUnitUI() {
+      const store = STORES[activeUnit];
+      document.getElementById('current-unit-name').innerText = store.name;
+      document.getElementById('hero-unit-title').innerText = store.name;
+      document.getElementById('hero-unit-address').innerText = `📍 ${store.address}`;
+      document.getElementById('cart-modal-unit-name').innerText = store.name;
+      updateActiveStoreStatusUI();
+    }
+
+    // CARREGAMENTO DAS FOTOS DO GITHUB
+    async function loadCategoryImages(folderName, gridId) {
+      const container = document.getElementById(gridId);
+      container.innerHTML = '<p class="col-span-full text-xs text-gray-400 text-center py-6 animate-pulse">Buscando ofertas atualizadas do mercado...</p>';
+
+      try {
+        const apiUrl = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/assets/${folderName}?ref=${GITHUB_BRANCH}`;
+        const response = await fetch(apiUrl);
+
+        if (!response.ok) throw new Error("Pasta não encontrada");
+
+        const data = await response.json();
+        const imageFiles = data.filter(file => file.name.match(/\.(jpg|jpeg|png|webp)$/i));
+
+        if (imageFiles.length === 0) {
+          container.innerHTML = '<div class="col-span-full text-center py-8 bg-white dark:bg-gray-900 rounded-2xl border border-dashed border-gray-200 dark:border-gray-800"><p class="text-xs text-gray-400">Nenhuma oferta cadastrada nesta categoria no momento.</p></div>';
+          return;
+        }
+
+        container.innerHTML = "";
+
+        imageFiles.forEach((file, index) => {
+          const rawUrl = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${GITHUB_BRANCH}/assets/${folderName}/${file.name}?v=${new Date().getTime()}`;
+          const itemName = file.name.replace(/\.[^/.]+$/, "").replace(/[-_]/g, " ");
+
+          const card = document.createElement('div');
+          card.className = "bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-md border border-gray-100 dark:border-gray-800 flex flex-col group hover:shadow-xl transition";
+          
+          card.innerHTML = `
+            <div class="relative bg-gray-50 dark:bg-gray-800 overflow-hidden aspect-square">
+              <img src="${rawUrl}" alt="${itemName}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
+              <div class="absolute top-2 right-2 bg-brand-orange text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow">
+                Oferta
+              </div>
+            </div>
+            
+            <div class="p-4 flex flex-col flex-1 justify-between space-y-3">
+              <div>
+                <h4 class="font-bold text-sm text-gray-800 dark:text-white capitalize line-clamp-1">${itemName}</h4>
+                <p class="text-xs text-brand-orange font-bold mt-0.5">R$ xx,xx</p>
+              </div>
+
+              <button onclick="addToCart('${folderName} - ${itemName}')" class="w-full bg-brand-purple hover:bg-brand-purpleLight dark:bg-gray-800 dark:hover:bg-gray-700 text-white font-bold py-2 rounded-xl text-xs transition flex items-center justify-center gap-1.5">
+                <span>➕ Adicionar à Lista</span>
+              </button>
+            </div>
+          `;
+
+          container.appendChild(card);
+        });
+
+      } catch (err) {
+        console.error(`Erro ao carregar ${folderName}:`, err);
+        container.innerHTML = '<div class="col-span-full text-center py-6 bg-gray-50 dark:bg-gray-800/50 rounded-2xl text-xs text-gray-400">Adicione imagens nesta pasta do GitHub para publicar ofertas.</div>';
+      }
+    }
+
+    function loadAllOfferCategories() {
+      loadCategoryImages("acougue", "grid-acougue");
+      loadCategoryImages("Bebidas", "grid-bebidas");
+      loadCategoryImages("hortifruti", "grid-hortifruti");
+    }
+
+    // LÓGICA DO CARRINHO / LISTA DE COMPRAS
+    function toggleCartModal() {
+      const modal = document.getElementById('cart-modal');
+      modal.classList.toggle('hidden');
+    }
+
+    function addToCart(itemName) {
+      cart.push(itemName);
+      localStorage.setItem('navarro_cart', JSON.stringify(cart));
+      updateCartUI();
+      toggleCartModal();
+    }
+
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      localStorage.setItem('navarro_cart', JSON.stringify(cart));
+      updateCartUI();
+    }
+
+    function updateCartUI() {
+      const badge = document.getElementById('cart-count-badge');
+      const container = document.getElementById('cart-items-container');
+
+      badge.innerText = cart.length;
+
+      if (cart.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-12 text-gray-400 space-y-2">
+            <span class="text-4xl">🛒</span>
+            <p class="text-xs font-medium">Sua lista de compras está vazia.</p>
+            <p class="text-[10px]">Navegue pelas ofertas e adicione itens para consultar via WhatsApp.</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = "";
+      cart.forEach((item, index) => {
+        const row = document.createElement('div');
+        row.className = "flex items-center justify-between bg-gray-50 dark:bg-gray-800 p-3 rounded-xl border border-gray-100 dark:border-gray-700 text-xs";
+        row.innerHTML = `
+          <div class="flex items-center gap-2">
+            <span class="text-brand-orange font-bold">•</span>
+            <span class="font-medium text-gray-800 dark:text-gray-200 capitalize">${item}</span>
+          </div>
+          <button onclick="removeFromCart(${index})" class="text-rose-500 hover:text-rose-700 font-bold px-2 py-1">✕</button>
+        `;
+        container.appendChild(row);
+      });
+    }
+
+    // ENVIO VIA WHATSAPP
+    function sendGeneralWhatsApp() {
+      const store = STORES[activeUnit];
+      const msg = `Olá! Gostaria de tirar uma dúvida sobre a *${store.name}*.`;
+      window.open(`https://wa.me/${store.whatsapp}?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+
+    function sendCartToWhatsApp() {
+      if (cart.length === 0) {
+        alert("Sua lista de compras está vazia!");
+        return;
+      }
+
+      const store = STORES[activeUnit];
+      let msg = `Olá, *${store.name}*!\n`;
+      msg += `Gostaria de verificar a disponibilidade e os valores dos seguintes itens da minha lista:\n\n`;
+
+      cart.forEach((item, idx) => {
+        msg += `${idx + 1}. *${item}* - R$ xx,xx\n`;
+      });
+
+      msg += `\nAguardo o retorno para prosseguir. Obrigado!`;
+      window.open(`https://wa.me/${store.whatsapp}?text=${encodeURIComponent(msg)}`, '_blank');
+    }
   </script>
+
 </body>
 </html>
